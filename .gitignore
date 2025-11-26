@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.swp
+.Python
+env/
+venv/
+.venv/
+
+# Virtual environment
+.venv/
+
+# Distribution
+build/
+dist/
+.eggs/
+*.egg-info/
+
+# IDEs
+.vscode/
+.idea/
+
+# Env & secrets
+.env
+.env.*
+credentials.ini
+
+# Databases
+*.db
+
+# Node
+node_modules/
+
+# OS
+.DS_Store
+
+# Logs
+logs/
+*.log

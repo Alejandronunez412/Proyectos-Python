@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAVE IA - Enciclopedia Verificada</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f1419 0%, #1a202c 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: rgba(10, 15, 30, 0.95);
+            border-bottom: 2px solid #3b82f6;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #60a5fa;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        nav {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        nav button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #60a5fa;
+            border: 1px solid #3b82f6;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        /* Main Container */
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Search Box Principal */
+        .search-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .search-container input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 2px solid #3b82f6;
+            background: rgba(15, 20, 25, 0.8);
+            color: #e2e8f0;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .search-container input:focus {
+            outline: none;
+            border-color: #60a5fa;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+
+        .search-container button {
+            padding: 0.75rem 1.5rem;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .search-container button:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+
+        /* Results Container */
+        #resultsContainer {
+            min-height: 200px;
+        }
+
+        #resultsContainer p {
+            text-align: center;
+            color: #94a3b8;
+            padding: 2rem;
+        }
+
+        #resultsContainer ul {
+            list-style: none;
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        #resultsContainer li {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid #3b82f6;
+            border-radius: 6px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        #resultsContainer li:hover {
+            border-color: #60a5fa;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+            transform: translateY(-4px);
+        }
+
+        #resultsContainer h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        #resultsContainer h3 a {
+            color: #60a5fa;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        #resultsContainer h3 a:hover {
+            color: #93c5fd;
+            text-decoration: underline;
+        }
+
+        #resultsContainer p {
+            color: #cbd5e1;
+            line-height: 1.6;
+            text-align: left;
+            padding: 0;
+        }
+
+        /* Artículos Grid */
+        .articulos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .articulo-card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid #3b82f6;
+            border-radius: 6px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .articulo-card:hover {
+            border-color: #60a5fa;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .articulo-card h3 {
+            color: #60a5fa;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .articulo-card p {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .articulo-card .fecha {
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.activo {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(15, 20, 25, 0.95);
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #3b82f6;
+            padding-bottom: 1rem;
+        }
+
+        .modal-header h2 {
+            color: #60a5fa;
+        }
+
+        .btn-close {
+            background: transparent;
+            border: none;
+            color: #60a5fa;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Formularios */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #60a5fa;
+            font-weight: 500;
+        }
+
+        .form-group textarea, .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid #3b82f6;
+            color: #e2e8f0;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.95rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Alertas */
+        .alerta {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .alerta.activa {
+            display: block;
+        }
+
+        .alerta-exito {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10b981;
+            color: #86efac;
+        }
+
+        .alerta-error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+        }
+
+        /* Verificación IA */
+        .verificacion-box {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 4px;
+        }
+
+        .verificacion-box h4 {
+            color: #60a5fa;
+            margin-bottom: 0.5rem;
+        }
+
+        .verificacion-box ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(10, 15, 30, 0.95);
+            border-top: 1px solid #3b82f6;
+            padding: 2rem;
+            text-align: center;
+            color: #94a3b8;
+            margin-top: 3rem;
+        }
+
+        /* Loader */
+        .loader {
+            border: 4px solid rgba(59, 130, 246, 0.2);
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <span>🤖</span>
+                DAVE IA
+            </div>
+            <nav>
+                <button class="btn-secondary" onclick="mostrarSeccion('busqueda')">🔍 Buscar Web</button>
+                <button class="btn-secondary" onclick="mostrarSeccion('articulos')">📚 Ver Artículos</button>
+                <button class="btn-secondary" onclick="abrirModalCrear()" id="btnCrear" style="display:none;">✍️ Crear Artículo</button>
+                <button class="btn-primary" onclick="abrirModalLogin()">Iniciar Sesión</button>
+                <button class="btn-secondary" onclick="abrirModalRegistro()">Registrarse</button>
+                <button class="btn-secondary" onclick="cerrarSesion()" id="btnCerrar" style="display:none;">Cerrar Sesión</button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Alertas -->
+        <div id="alerta" class="alerta"></div>
+
+        <!-- Sección de Búsqueda Web -->
+        <div id="seccionBusqueda">
+            <h2 style="color: #60a5fa; margin-bottom: 1rem;">🌐 Buscar Información en Internet</h2>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Escribe tu búsqueda aquí... Ej: Python, IA, Blockchain">
+                <button id="searchButton">🔍 Buscar</button>
+            </div>
+
+            <div id="resultsContainer">
+                <p>Ingresa un término de búsqueda para comenzar.</p>
+            </div>
+        </div>
+
+        <!-- Sección de Artículos -->
+        <div id="seccionArticulos" style="display:none;">
+            <h2 style="color: #60a5fa; margin-bottom: 1rem;">📚 Artículos Verificados</h2>
+            <div class="articulos-grid" id="articulos"></div>
+        </div>
+    </main>
+
+    <!-- Modal Login -->
+    <div id="modalLogin" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Iniciar Sesión</h2>
+                <button class="btn-close" onclick="cerrarModal('modalLogin')">×</button>
+            </div>
+            <form onsubmit="login(event)">
+                <div class="form-group">
+                    <label>Usuario</label>
+                    <input type="text" id="loginUsername" required>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Registro -->
+    <div id="modalRegistro" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Registrarse</h2>
+                <button class="btn-close" onclick="cerrarModal('modalRegistro')">×</button>
+            </div>
+            <form onsubmit="registro(event)">
+                <div class="form-group">
+                    <label>Usuario</label>
+                    <input type="text" id="regUsername" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="regEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña (mínimo 8 caracteres)</label>
+                    <input type="password" id="regPassword" minlength="8" required>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">Registrarse</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Crear Artículo -->
+    <div id="modalCrear" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>✍️ Crear Nuevo Artículo</h2>
+                <button class="btn-close" onclick="cerrarModal('modalCrear')">×</button>
+            </div>
+            <form onsubmit="crearArticulo(event)">
+                <div class="form-group">
+                    <label>Título del Artículo</label>
+                    <input type="text" id="crearTitulo" required>
+                </div>
+                <div class="form-group">
+                    <label>Contenido (Mínimo 100 caracteres)</label>
+                    <textarea id="crearContenido" minlength="100" style="min-height: 200px;" required></textarea>
+                </div>
+                <div id="verificacionCrear"></div>
+                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1rem;">Publicar Artículo</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>DAVE IA © 2025 - Enciclopedia verificada con IA | Seguridad y precisión garantizadas</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
